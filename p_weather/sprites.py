@@ -3,7 +3,54 @@ from PIL import Image, ImageOps
 import random
 import math
 
-class Sprites():
+
+
+
+class Canvas():
+
+    def __init__(self,canvas:Image):
+        self.img = canvas
+
+
+    def EINKFlip(self):
+        image = self.img
+        image = image.rotate(-90, expand=True)   
+        image = image.transpose(Image.FLIP_TOP_BOTTOM)  
+        self.img =  image
+        return self.GetCanvas()
+        
+        
+
+    def BWInvert(self):
+        image = self.img
+        image = image.convert('1')
+        #newimg = ImageOps.invert(image) - bad inversion
+
+        oldpixels = image.load()
+        width, height = image.size
+        newimg = Image.new('1', (width,height), color = (0))
+        newpixels = newimg.load()
+        for x in range(width):
+            for y in range(height):
+                if oldpixels[x, y]==0:
+                    newpixels[x,y] = 1
+
+        self.img =  newimg
+        return self.GetCanvas()  
+
+
+    def GetCanvas(self):
+        return self.img   
+
+
+
+
+
+
+
+
+
+class Sprites(Canvas):
 
     DISABLED = -999999
 
@@ -20,14 +67,33 @@ class Sprites():
     
     EXT = ".png"
     
+    DIGITPLAS = 10
+    DIGITMINUS = 11
+    DIGITSEMICOLON = 12    
+    
+    CLOUDWMAX =32
+    CLOUDS = [2,3,5,10,30,50]
+    CLOUDK = 0.5    
+    
+    HEAVYRAIN = 5.0
+    RAINFACTOR = 20
+    
+    HEAVYSNOW = 5.0
+    SNOWFACTOR = 10    
+    
+    
+    SMOKE_R_PX = 30
+    PERSENT_DELTA = 4
+    SMOKE_SIZE = 60
+    
+    
 
-    def __init__(self,spritesdir,canvas):
-        self.img = canvas
+    def __init__(self,spritesdir:str,canvas:Image):
+        super().__init__(canvas)
         self.pix = self.img.load()
         self.dir = spritesdir
         self.ext = self.EXT
-        self.w, self.h = self.img.size
-
+        self.w, self.h = canvas.size
 
 
     def Dot(self,x,y,color):
@@ -71,9 +137,7 @@ class Sprites():
         return w
 
 
-    DIGITPLAS = 10
-    DIGITMINUS = 11
-    DIGITSEMICOLON = 12
+
 
     def DrawInt(self,n,xpos,ypos,issign=True,mindigits=1):
         n = round(n)
@@ -127,9 +191,7 @@ class Sprites():
 
 
 
-    CLOUDWMAX =32
-    CLOUDS = [2,3,5,10,30,50]
-    CLOUDK = 0.5
+
 
     def DrawCloud(self,persent,xpos,ypos,width,height):
         if (persent<2):
@@ -162,8 +224,7 @@ class Sprites():
         for c in cloudset: 
             self.Draw("cloud",c,xpos+random.randrange(dx),ypos)
         
-    HEAVYRAIN = 5.0
-    RAINFACTOR = 20
+
 
     def DrawRain(self,value,xpos,ypos,width,tline):
         ypos+=1
@@ -180,8 +241,7 @@ class Sprites():
                     self.pix[x,y] = self.Black
                     self.pix[x,y-1] = self.Black
         
-    HEAVYSNOW = 5.0
-    SNOWFACTOR = 10
+
     
     def DrawSnow(self,value,xpos,ypos,width,tline):
         ypos+=1
@@ -277,11 +337,7 @@ class Sprites():
 
 
 
-    SMOKE_R_PX = 30
-    PERSENT_DELTA = 4
-    SMOKE_SIZE = 60
-
-    
+   
 
     def DrawSmoke_makeline(self,angle_deg):
         a = (math.pi  * angle_deg) / 180

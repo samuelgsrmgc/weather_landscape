@@ -5,47 +5,7 @@ import datetime
 from urllib.request import urlopen
 
 
-
-class OpenWeatherMapSettings():
-
-    TEMP_UNITS_CELSIUS = 0 
-    TEMP_UNITS_FAHRENHEIT = 1
-    PRESSURE_RAIN_HPA = 980
-    PRESSURE_FAIR_HPA = 1040
-
-
-    def __init__(self):
-        self.OWM_KEY = None
-        self.OWM_LAT = None
-        self.OWM_LON = None
-        self.rootdir = ''
-        self.TEMPUNITS_MODE = 0
-        self.PRESSURE_MIN = self.PRESSURE_RAIN_HPA
-        self.PRESSURE_MAX = self.PRESSURE_FAIR_HPA
-
-
-    @staticmethod
-    def Fill(obj,rootdir:str):
-        s = OpenWeatherMapSettings()
-        s.rootdir = rootdir
-        print("Settings:")
-        for key in obj.__dict__.keys():
-            if not key.startswith('__'):
-                if key.upper() == key:
-                    val = obj.__dict__[key]
-                    setattr(s, key, val)
-                    if (key=='OWM_KEY'):
-                        print('  ','OWM_KEY updated')
-                    else:
-                        print('  ',key,'=',val)
-                else:
-                    print('  ',key,'ignored')
-        return s
-
-        
-    @property
-    def IsCelsius(self):
-        return self.TEMPUNITS_MODE!=self.TEMP_UNITS_FAHRENHEIT
+from p_weather.configuration import WLBaseSettings
 
 
 
@@ -80,7 +40,7 @@ class WeatherInfo():
 
 
 
-    def __init__(self,fdata,cfg:OpenWeatherMapSettings):
+    def __init__(self,fdata,cfg:WLBaseSettings):
     
         self.iscelsius = cfg.IsCelsius 
     
@@ -159,7 +119,7 @@ class OpenWeatherMap():
     TOOMUCHTIME_SEC = 4*60*60 # 4 hours 
 
 
-    def __init__(self,cfg:OpenWeatherMapSettings):
+    def __init__(self,cfg:WLBaseSettings):
         assert cfg!=None
         assert cfg.OWM_LAT!=None
         assert cfg.OWM_LON!=None
@@ -171,11 +131,11 @@ class OpenWeatherMap():
         self.URL_CURR =  self.OWMURL+"weather?"+reqstr
         self.f = []
         
-        if not os.path.exists(self.cfg.rootdir):
-            os.makedirs(self.cfg.rootdir)
+        if not os.path.exists(self.cfg.WORK_DIR):
+            os.makedirs(self.cfg.WORK_DIR)
 
-        self.filename_forecast = os.path.join(self.cfg.rootdir,self.FILENAME_FORECAST+self.PLACEKEY+self.FILENAME_EXT)
-        self.filename_curr = os.path.join(self.cfg.rootdir,self.FILENAME_CURR+self.PLACEKEY+self.FILENAME_EXT)
+        self.filename_forecast = os.path.join(self.cfg.WORK_DIR,self.FILENAME_FORECAST+self.PLACEKEY+self.FILENAME_EXT)
+        self.filename_curr = os.path.join(self.cfg.WORK_DIR,self.FILENAME_CURR+self.PLACEKEY+self.FILENAME_EXT)
 
     @property
     def LAT(self)->float:
