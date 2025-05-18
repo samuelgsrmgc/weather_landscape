@@ -11,19 +11,30 @@ import secrets
 import socket
 
 from weather_landscape import WeatherLandscape
-
+from configs import *
 
 SERV_IPADDR = "0.0.0.0"
 SERV_PORT = 3355
-
-EINKFILENAME = "test.bmp"
-USERFILENAME = "test1.bmp"
 FAVICON = "favicon.ico"
-
 FILETOOOLD_SEC = 60*10
 
-WEATHER = WeatherLandscape()
 
+WEATHERS = [    WeatherLandscape(WLConfig_BW())          ,
+                WeatherLandscape(WLConfig_BWI())         ,
+                WeatherLandscape(WLConfig_EINK())        ,
+                WeatherLandscape(WLConfig_RGB_Black())   ,
+                WeatherLandscape(WLConfig_RGB_White())   ,
+                ]
+                
+
+MIMES = {
+        '.jpg': 'image/jpeg',
+        '.jpeg': 'image/jpeg',
+        '.png': 'image/png',
+        '.bmp': 'image/bmp',
+    }
+
+ 
 
 class WeatherLandscapeServer(BaseHTTPRequestHandler):
 
@@ -67,11 +78,13 @@ class WeatherLandscapeServer(BaseHTTPRequestHandler):
            return
            
 
-        if (self.path.startswith('/'+EINKFILENAME)) or (self.path.startswith('/'+USERFILENAME)):
-            self.CreateWeatherImages() 
-            file_name = WEATHER.TmpFilePath(self.path[1:])
-            self.do_GET_sendfile(file_name ,"image/bmp")
-            return
+        for w in WEATHERS:
+            if self.path == '/'+w.cfg.OUT_FILENAME:
+                file_name = self.CreateWeatherImage(w) 
+                mime = MIMES.get(w.cfg.OUT_FILEEXT.lower(), None)
+                assert mime!=None, "Unsuported image file extension"
+                self.do_GET_sendfile(file_name ,mime)
+                return
             
         print("Path not accessible:",self.path)
         self.send_response(403)
@@ -83,22 +96,14 @@ class WeatherLandscapeServer(BaseHTTPRequestHandler):
         return (not os.path.isfile(filename)) or ( (time.time() - os.stat(filename).st_mtime) > FILETOOOLD_SEC )
 
 
-    def CreateWeatherImages(self):
-                    
-        user_file_name = WEATHER.TmpFilePath(USERFILENAME)
-        eink_file_name = WEATHER.TmpFilePath(EINKFILENAME)
+    def CreateWeatherImage(self,weather):
+        file_name = weather.ResultFilePath()
+        
+        if not self.IsFileTooOld(file_name):
+            return file_name
        
-        if not self.IsFileTooOld(user_file_name):
-            return
+        return weather.SaveImage()
        
-        img = WEATHER.MakeImage() 
-        img.save(user_file_name) 
-        
-        img = img.rotate(-90, expand=True)   
-        img = img.transpose(Image.FLIP_TOP_BOTTOM)  
-        
-        img.save(eink_file_name) 
-        
         
         
         
@@ -106,12 +111,17 @@ class WeatherLandscapeServer(BaseHTTPRequestHandler):
 
     def IndexHtml(self):
     
+   
         body = '<h1>Weather as Landscape</h1>'
-        body+='<p>Place: '+("%.4f" % secrets.OWM_LAT) +' , '+("%.4f" % secrets.OWM_LON)+'</p>'
-        body+='<p><img src="'+USERFILENAME+'" alt="Weather" "></p>'
-        body+='<p>ESP32 URL: <span id="eink"></span></p>'
-        body+='<script> document.getElementById("eink").innerHTML = window.location+"'+EINKFILENAME+'" ;</script>'
-            
+        
+        for w in WEATHERS:
+            id = 'id_'+w.cfg.OUT_FILENAME
+            body+='<h2>'+w.cfg.TITLE+'</h2>'  
+            #body+='<p>Place: '+("%.4f" % w.cfg.OWM_LAT) +' , '+("%.4f" % w.cfg.OWM_LON)+'</p>'
+            body+='<p><img src="'+w.cfg.OUT_FILENAME+'" alt="'+w.cfg.TITLE+'" "></p>'
+            body+='<h4>URL: <span id="'+id+'"></span></h4>'
+            body+='<script> document.getElementById("'+id+'").innerHTML = window.location+"'+w.cfg.OUT_FILENAME+'" ;</script>'
+            body+='<p>&nbsp;</p>'
             
         return """
             <!DOCTYPE html>

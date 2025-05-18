@@ -12,7 +12,7 @@ class WeatherLandscape:
 
 
     def __init__(self,configuration:WLBaseSettings):
-        self.cfg = configuration
+        self.cfg = WLBaseSettings.Fill( configuration, secrets )    
         assert self.cfg.OWM_KEY != "000000000000000000",  "Set OWM_KEY variable to your OpenWeather API key in secrets.py"
 
 
@@ -30,12 +30,15 @@ class WeatherLandscape:
 
     def SaveImage(self)->str:
         img = self.MakeImage() 
-        placekey = OpenWeatherMap.MakePlaceKey(self.cfg.OWM_LAT,self.cfg.OWM_LON)
-        outfilepath = self.MakeFilePath(self.cfg.OUT_FILENAME+placekey+self.cfg.OUT_FILEEXT)
+        outfilepath = self.ResultFilePath()
         img.save(outfilepath) 
         return outfilepath
         
-        
+    def ResultFilePath(self):
+        return self.MakeFilePath(self.cfg.OUT_FILENAME+self.cfg.OUT_FILEEXT)
 
     def MakeFilePath(self,filename):
         return os.path.join(self.cfg.WORK_DIR,filename)
+        
+        
+        
