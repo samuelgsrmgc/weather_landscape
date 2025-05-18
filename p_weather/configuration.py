@@ -65,6 +65,17 @@ class WLBaseSettings(object):
     DRAW_DEFAULT_DEGREE_PER_PIXEL = 0.5
     DRAW_FLOWER_RIGHT_PX = 15
     DRAW_FLOWER_LEFT_PX = 10
+    
+    
+    # Temperature units
+    # 0 - Celsius
+    # 1 - Fahrenheit
+    TEMPUNITS_MODE = 0
+
+
+    # High and low pressure values in hPa for smoke visualization
+    PRESSURE_MIN = 980
+    PRESSURE_MAX = 1030    
 
     
     

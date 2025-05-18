@@ -43,8 +43,8 @@ class WLConfig_RGB_White(WLBaseSettings):
     COLOR_SMOKE = (127,127,127) 
     COLOR_BG = (255,255,255)
     COLOR_FG = (0,0,0)    
-    COLOR_RAIN = (0,0,255)
-    COLOR_SNOW = (255,255,255)
+    COLOR_RAIN = (10, 100, 148)
+    COLOR_SNOW = (194, 194, 194)
     
     
 class WLConfig_RGB_Black(WLConfig_RGB_White):    
@@ -55,5 +55,5 @@ class WLConfig_RGB_Black(WLConfig_RGB_White):
     COLOR_SMOKE = (127,127,127) 
     COLOR_BG = (0,0,0)
     COLOR_FG =     (255,255,255)
-    COLOR_RAIN = (0,0,255)
+    COLOR_RAIN = (122, 213, 255)
     COLOR_SNOW = (255,255,255)    
