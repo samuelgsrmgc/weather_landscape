@@ -1,5 +1,6 @@
 
 from p_weather.sprites import Sprites
+from p_weather.sprites_rgb import SpritesRGB
 from p_weather.openweathermap import OpenWeatherMap,WeatherInfo
 from p_weather.sunrise import sun
 from p_weather.configuration import WLBaseSettings
@@ -33,7 +34,10 @@ class DrawWeather():
 
     def __init__(self,img:Image,config:WLBaseSettings):
         self.cfg = config
-        self.sprite = Sprites(self.cfg.SPRITES_DIR,img)
+        if self.cfg.SPRITES_MODE == WLBaseSettings.SPRITES_MODE_RGB:
+            self.sprite = SpritesRGB(self.cfg,img)
+        else:
+            self.sprite = Sprites(self.cfg.SPRITES_DIR,img)
         (self.IMGEWIDTH,self.IMGHEIGHT) = img.size
 
 
@@ -262,12 +266,9 @@ class DrawWeather():
 
 
         BLACK = 0
+        
+        self.sprite.DrawSoil(tline0)
 
-        for x in range(self.picwidth):
-            if (tline0[x]<self.picheight):
-                self.sprite.Dot(x,tline0[x],Sprites.BLACK)
-            else:
-                print("out of range: %i - %i(max %i)" % (x,tline0[x],self.picheight))
 
 
 

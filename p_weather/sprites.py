@@ -106,6 +106,14 @@ class Sprites(Canvas):
         self.pix[x,y] = color
         
 
+
+    def GetSprite(self,name,index)->Image:
+        imagefilename = "%s_%02i%s" % (name, index, self.ext)
+        imagepath = os.path.join(self.dir,imagefilename) 
+        img = Image.open(imagepath)
+        return img
+
+
     def Draw(self,name,index,xpos,ypos,ismirror=False):
 
         if (xpos<0) or (ypos<0):
@@ -113,9 +121,7 @@ class Sprites(Canvas):
 
         #print("DRAW '%s' #%i at %i,%i" % (name,index,xpos,ypos))
     
-        imagefilename = "%s_%02i%s" % (name, index, self.ext)
-        imagepath = os.path.join(self.dir,imagefilename) 
-        img = Image.open(imagepath)
+        img = self.GetSprite(name,index)
         if (ismirror):
             img = ImageOps.mirror(img)
         w, h = img.size
@@ -138,6 +144,10 @@ class Sprites(Canvas):
 
 
 
+    def DrawDigit(self,id,xpos,ypos):
+        return self.Draw("digit",id,xpos,ypos)
+    
+
 
     def DrawInt(self,n,xpos,ypos,issign=True,mindigits=1):
         n = round(n)
@@ -152,23 +162,23 @@ class Sprites(Canvas):
         n2 = n % 10
         dx = 0
         if (issign) or (sign == self.DIGITMINUS):
-            w = self.Draw("digit",sign,xpos+dx,ypos)
+            w = self.DrawDigit(sign,xpos+dx,ypos)
             dx+=w+1
         if (n0!=0) or (mindigits>=3):
-            w = self.Draw("digit",n0,xpos+dx,ypos)
+            w = self.DrawDigit(n0,xpos+dx,ypos)
             dx+=w
             if (n0!=1):
                 dx+=1
         if (n1!=0) or (n0!=0)  or (mindigits>=2):
             if (n1==1):
                 dx -=1
-            w = self.Draw("digit",n1,xpos+dx,ypos)
+            w = self.DrawDigit(n1,xpos+dx,ypos)
             dx+=w
             if (n1!=1):
                 dx+=1
         if (n2==1):
             dx -=1                
-        w = self.Draw("digit",n2,xpos+dx,ypos)
+        w = self.DrawDigit(n2,xpos+dx,ypos)
         dx+=w
         if (n2!=1):
             dx +=1                
@@ -182,7 +192,7 @@ class Sprites(Canvas):
         dx=0
         w = self.DrawInt(h,xpos+dx,ypos,False,2)
         dx+=w
-        w = self.Draw("digit",self.DIGITSEMICOLON,xpos+dx,ypos)
+        w = self.DrawDigit(self.DIGITSEMICOLON,xpos+dx,ypos)
         dx+=w
         dx = self.DrawInt(m,xpos+dx,ypos,False,2)
         dx+=w+1
@@ -226,7 +236,7 @@ class Sprites(Canvas):
         
 
 
-    def DrawRain(self,value,xpos,ypos,width,tline):
+    def DrawRain(self,value,xpos,ypos,width,tline,dotcolor=None):
         ypos+=1
         r = 1.0 - ( value / self.HEAVYRAIN ) / self.RAINFACTOR 
 
@@ -238,12 +248,12 @@ class Sprites(Canvas):
                 if (y>=self.h): 
                     continue
                 if (random.random()>r):
-                    self.pix[x,y] = self.Black
-                    self.pix[x,y-1] = self.Black
+                    self.pix[x,y] = self.Black if dotcolor==None else dotcolor
+                    self.pix[x,y-1] = self.Black if dotcolor==None else dotcolor
         
 
     
-    def DrawSnow(self,value,xpos,ypos,width,tline):
+    def DrawSnow(self,value,xpos,ypos,width,tline,dotcolor=None):
         ypos+=1
         r = 1.0 - ( value / self.HEAVYSNOW ) / self.SNOWFACTOR 
 
@@ -254,8 +264,13 @@ class Sprites(Canvas):
                 if (y>=self.h): 
                     continue
                 if (random.random()>r):
-                    self.pix[x,y] = self.Black
+                    self.pix[x,y] = self.Black if dotcolor==None else dotcolor
 
+
+    def DrawSoil(self,tline:list[int],xoffset =0, dotcolor=None):
+        width = len(tline)
+        for x in range(width):
+            self.Dot(x+xoffset,tline[x],self.BLACK if dotcolor==None else dotcolor)
 
 
 
@@ -362,14 +377,18 @@ class Sprites(Canvas):
 
     
     
-
+    def MakeSmokeAt(self,x,y,index:int):
+        self.Dot(x, y, self.Black )
+        
 
     def DrawSmoke(self,x0,y0,persent):
         dots = self.DrawSmoke_makeline(persent)
+        i=0
         for d in dots:
             x = d[0]
             y = d[1]
             r = d[2]
+            
             if random.random()*1.3 > (r/self.SMOKE_SIZE):
                 if random.random()*1.2 < (r/self.SMOKE_SIZE):
                     dx = random.randint(-1, 1)
@@ -377,8 +396,9 @@ class Sprites(Canvas):
                 else:
                     dx = 0
                     dy = 0
-                    
-                self.Dot(x0+x+dx, self.h-(y0+y)+dy,self.Black)
+                self.MakeSmokeAt(x0+x+dx, self.h-(y0+y)+dy,i)
+                
+            i+=1
 
 
         

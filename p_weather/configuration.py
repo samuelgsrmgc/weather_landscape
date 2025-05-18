@@ -1,5 +1,10 @@
 class WLBaseSettings(object):
 
+    SPRITES_MODE_BW = 0
+    SPRITES_MODE_RGB = 1
+    
+    
+
     TEMP_UNITS_CELSIUS = 0 
     TEMP_UNITS_FAHRENHEIT = 1
     PRESSURE_RAIN_HPA = 980
@@ -21,11 +26,19 @@ class WLBaseSettings(object):
     OUT_FILEEXT = ".bmp"
     TEMPLATE_FILENAME = "template.bmp"
     SPRITES_DIR="sprite"
-    DRAWOFFSET = 65
-    BACKGROUND = (255,255,255)
-    FOREGROUND = (0,0,0)
+
     POSTPROCESS_INVERT = False
     POSTPROCESS_EINKFLIP = False      
+    SPRITES_MODE = SPRITES_MODE_BW
+
+    COLOR_SOIL = (0,0,0)
+    COLOR_SMOKE = (127,127,127) 
+    COLOR_BG = (255,255,255)
+    COLOR_FG = (0,0,0)    
+    COLOR_RAIN = (0,0,255)
+    COLOR_SNOW = (255,255,255)
+
+    
     
     @staticmethod
     def Fill(cfg,obj):
@@ -41,8 +54,10 @@ class WLBaseSettings(object):
                         print('  ',key,'=',val)
                 else:
                     print('  ',key,'ignored')
-        return cfg    
-    
+        return cfg 
+
+        
+    DRAWOFFSET = 65    
     DRAW_XSTART = 32
     DRAW_XSTEP  = 44
     DRAW_XFLAT =  10

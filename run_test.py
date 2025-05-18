@@ -4,17 +4,18 @@ import os
 from weather_landscape import WeatherLandscape
 from p_weather.configuration import WLBaseSettings
 
-from configs import WLConfig_BW, WLConfig_BWI, WLConfig_RGB, WLConfig_EINK
+from configs import *
 import secrets
 
 
 
 cfgs =  [ 
-#          WLConfig_BW(),
-#          WLConfig_BWI(),
+          WLConfig_BW(),
+          WLConfig_BWI(),
           WLConfig_EINK(),
           
-#          WLConfig_RGB(),          
+          WLConfig_RGB_Black(),          
+          WLConfig_RGB_White(),
           ]
 
 for cfg in cfgs:
