@@ -27,14 +27,6 @@ WEATHERS = [    WeatherLandscape(WLConfig_BW())          ,
                 ]
                 
 
-MIMES = {
-        '.jpg': 'image/jpeg',
-        '.jpeg': 'image/jpeg',
-        '.png': 'image/png',
-        '.bmp': 'image/bmp',
-    }
-
- 
 
 class WeatherLandscapeServer(BaseHTTPRequestHandler):
 
@@ -81,7 +73,7 @@ class WeatherLandscapeServer(BaseHTTPRequestHandler):
         for w in WEATHERS:
             if self.path == '/'+w.cfg.OUT_FILENAME:
                 file_name = self.CreateWeatherImage(w) 
-                mime = MIMES.get(w.cfg.OUT_FILEEXT.lower(), None)
+                mime = w.cfg.GetMIME()
                 assert mime!=None, "Unsuported image file extension"
                 self.do_GET_sendfile(file_name ,mime)
                 return
@@ -97,7 +89,7 @@ class WeatherLandscapeServer(BaseHTTPRequestHandler):
 
 
     def CreateWeatherImage(self,weather):
-        file_name = weather.ResultFilePath()
+        file_name = weather.cfg.ImageFilePath()
         
         if not self.IsFileTooOld(file_name):
             return file_name
@@ -146,7 +138,8 @@ def get_my_ips():
         s.close()
 
     
-    
+
+
 
 httpd = HTTPServer((SERV_IPADDR,SERV_PORT),WeatherLandscapeServer)
 for ip in get_my_ips():
@@ -154,3 +147,11 @@ for ip in get_my_ips():
 httpd.serve_forever() 
 
 
+
+
+# IPV6
+
+#class HTTPServerV6(HTTPServer):
+#    address_family = socket.AF_INET6    
+#httpd = HTTPServerV6(('::',SERV_PORT),WeatherLandscapeServer)
+#httpd.serve_forever() 

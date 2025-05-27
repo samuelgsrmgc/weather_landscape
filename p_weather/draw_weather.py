@@ -30,14 +30,30 @@ class DrawWeather():
         #print(t,x,y)
 
 
-
+    @staticmethod
+    def SpritesFactory(cfg:WLBaseSettings,canvasimag:Image):
+        if cfg.SPRITES_MODE == WLBaseSettings.SPRITES_MODE_RGB:
+            return SpritesRGB(cfg,canvasimag)
+        elif cfg.SPRITES_MODE == WLBaseSettings.SPRITES_MODE_BW:
+            return Sprites(cfg.SPRITES_DIR,canvasimag)
+        else: 
+            return None
+            
+            
+    @staticmethod
+    def ApplyPostprocess(sprite:Sprites,cfg:WLBaseSettings):
+        if (cfg.POSTPROCESS_EINKFLIP):
+            sprite.EINKFlip()
+        if (cfg.POSTPROCESS_INVERT):
+            sprite.BWInvert()
+        return sprite.GetCanvas()            
+            
+            
 
     def __init__(self,img:Image,config:WLBaseSettings):
         self.cfg = config
-        if self.cfg.SPRITES_MODE == WLBaseSettings.SPRITES_MODE_RGB:
-            self.sprite = SpritesRGB(self.cfg,img)
-        else:
-            self.sprite = Sprites(self.cfg.SPRITES_DIR,img)
+        self.sprite = DrawWeather.SpritesFactory(self.cfg,img)
+        assert self.sprite != None
         (self.IMGEWIDTH,self.IMGHEIGHT) = img.size
 
 
@@ -70,13 +86,10 @@ class DrawWeather():
     
     def Draw(self,owm:OpenWeatherMap):
         self.DrawEx(self.cfg.DRAWOFFSET,owm)
-        if (self.cfg.POSTPROCESS_EINKFLIP):
-            self.sprite.EINKFlip()
-        if (self.cfg.POSTPROCESS_INVERT):
-            self.sprite.BWInvert()
-        return self.sprite.GetCanvas()
-    
+        return DrawWeather.ApplyPostprocess(self.sprite,self.cfg)
 
+
+  
 
     #todo: add thunderstorm
     #todo: add fog
@@ -111,7 +124,7 @@ class DrawWeather():
         for i in range(xstart):
             tline[i] = oldy
         yclouds = int(ypos-ystep/2)
-        f.Print()
+        print( str(f) )
 
         self.sprite.Draw("house",0,xpos,oldy) 
         
@@ -234,7 +247,7 @@ class DrawWeather():
             if (f==None):
                 continue
  
-            f.Print()
+            print( str(f) )
             dx = self.TimeDiffToPixels(f.t-tf)  - xstep/2
             ix =int(xpos+dx)
             

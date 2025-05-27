@@ -1,3 +1,6 @@
+import os
+
+
 class WLBaseSettings(object):
 
     SPRITES_MODE_BW = 0
@@ -77,5 +80,23 @@ class WLBaseSettings(object):
     PRESSURE_MIN = 980
     PRESSURE_MAX = 1030    
 
+    
+    def ImageFilePath(self):
+        return self.MakeFilePath(self.OUT_FILENAME+self.OUT_FILEEXT)
+
+    def MakeFilePath(self,filename):
+        return os.path.join(self.WORK_DIR,filename)                
+        
+        
+    MIMES = {
+            '.gif': 'image/gif',
+            '.jpg': 'image/jpeg',
+            '.jpeg': 'image/jpeg',
+            '.png': 'image/png',
+            '.bmp': 'image/bmp',
+        }  
+
+    def GetMIME(self):
+        return self.MIMES.get(self.OUT_FILEEXT.lower(), None)        
     
     

@@ -88,8 +88,10 @@ class WeatherInfo():
         self.pressure = float(fdata['main']['pressure'])
 
 
-    def Print(self):
-        print("%s %i %03i%%  %.2f %.2f  %+.2f (%5.1f,%03i)"  % (str(self.t),self.id,self.clouds,self.rain,self.snow,self.temp,self.windspeed,self.winddeg)  )
+     
+    def __str__(self):
+        return "%s %i %03i%%  %.2f %.2f  %+.2f (%5.1f,%03i)"  % (str(self.t),self.id,self.clouds,self.rain,self.snow,self.temp,self.windspeed,self.winddeg)         
+        
 
     @staticmethod
     def Check(fdata):
@@ -253,7 +255,11 @@ class OpenWeatherMap():
             f.Print()
 
        
-
+    def ToString(self):
+        s = ""
+        for f in self.f:
+            s+= str(f) + "\n"
+        return s
 
 
 
