@@ -110,16 +110,22 @@ Update **OWM_KEY** variable in the `secrets.py` with your OpenWeather API key.
 python run_test.py
 ```
 
+Find generated images in the "tmp" folder.
+
 #### Run server
 
 ```
 python run_server.py
 ```
 
+![Setup](pic/server_start_screenshot.png)
+
+Access the server page from a browser to see the number of generated images.
 
 
 
-## Hardware
+
+## E-Ink module
 
 <!-- ![2.9inch e-Paper Module](pic/eink.jpg) -->
 ![Setup](pic/hardware.jpg)
@@ -127,3 +133,14 @@ python run_server.py
 The hardware setup includes an [ESP32 development board](https://www.adafruit.com/product/3269) and [2.9inch E-Ink display module](https://www.waveshare.com/2.9inch-e-paper-module.htm). Currently, the setup only displays an image sourced from the internet, updating every 15 minutes. It is uncertain whether the image generation code can be adapted for use with MicroPython on the ESP32 at this time.
 
 [More information](esp32/README.md)
+
+
+## Phone
+
+![Setup](pic/landscape_rgb_w.png)
+
+During the test, several images are generated. The black-and-white images are intended for use with an E-Ink module, while the color images can be placed on a phone's home screen. For Android devices, there is an app called [Web Image Widget](https://play.google.com/store/apps/details?id=com.ibuffed.webimagewidget&hl=en) that allows you to create a widget displaying an image from the internet. To use it, start the server script from the repository and add a widget that points to one of the generated images.
+
+![Android](pic/color_phone_screenshot.jpg)
+
+
