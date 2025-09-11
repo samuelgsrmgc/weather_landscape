@@ -133,6 +133,7 @@ class Sprites(Canvas):
                     continue
                 if (ypos+y>=self.h) or (ypos+y<0):
                     continue
+               
                 if (pix[x,y]==self.BLACK):
                     self.Dot(xpos+x,ypos+y,self.Black)
                 elif (pix[x,y]==self.WHITE):

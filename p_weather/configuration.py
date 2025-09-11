@@ -1,4 +1,6 @@
 import os
+from p_weather.holidays import WLHolidays,WLHEntry
+import datetime
 
 
 class WLBaseSettings(object):
@@ -100,3 +102,11 @@ class WLBaseSettings(object):
         return self.MIMES.get(self.OUT_FILEEXT.lower(), None)        
     
     
+    HOLIDAYS = WLHolidays()
+    
+    def LoadHolidays(self,path:str=None):
+        return self.HOLIDAYS.Load(path)
+        
+        
+    def GetOneHoliday(self, t0 : datetime.datetime, t1: datetime.datetime) -> WLHEntry:
+        return self.HOLIDAYS.GetOne(t0,t1)

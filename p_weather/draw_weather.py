@@ -202,6 +202,15 @@ class DrawWeather():
 
             ymoon = ypos-ystep*5/8
 
+            holiday_obj = self.cfg.GetOneHoliday(tf,tf+dt)
+            if holiday_obj:
+                t_holiday = holiday_obj.MakeTime(tf) 
+                print(">>>",t_holiday,holiday_obj)
+                assert t_holiday!= None
+                dx = self.TimeDiffToPixels(t_holiday-tf)  - xstep/2
+                yholiday = ymoon #todo:update
+                self.sprite.Draw(holiday_obj.sprite,holiday_obj.index,xpos+dx,yholiday)
+
             if (tf<=t_sunrise) and (tf+dt>t_sunrise):
                 dx = self.TimeDiffToPixels(t_sunrise-tf)  - xstep/2
                 self.sprite.Draw("sun",0,xpos+dx,ymoon)

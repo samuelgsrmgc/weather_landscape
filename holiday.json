@@ -1,0 +1,19 @@
+{
+  "title" : "Holidays",
+  "data": [
+
+
+    {
+      "date": "12.09",
+      "sprite":"stork",
+      "index": 0,
+      "time": "2:00",
+      "options": "top;stay 6;",
+      "text": "TEST"
+    }
+
+
+
+    
+  ]
+}
