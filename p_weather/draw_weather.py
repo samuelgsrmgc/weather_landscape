@@ -233,8 +233,7 @@ class DrawWeather():
             tf += dt
         
 
-        xright = xstart + xstep*nforecasrt
-        xleft=0
+        xleft = 0
         tf = t+dt*(nforecasrt+1)
         for holiday_obj in self.cfg.GetAllHolidays(t,tf ):
             assert holiday_obj!=None

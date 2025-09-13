@@ -9,11 +9,11 @@ from configs import *
 
 cfgs =  [ 
           WLConfig_BW(),
-         #WLConfig_BWI(),
-         #WLConfig_EINK(),
-         #
-         #WLConfig_RGB_Black(),          
-         #WLConfig_RGB_White(),
+          WLConfig_BWI(),
+          WLConfig_EINK(),
+         
+          WLConfig_RGB_Black(),          
+          WLConfig_RGB_White(),
           ]
           
 
