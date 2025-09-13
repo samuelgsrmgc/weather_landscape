@@ -211,7 +211,6 @@ class DrawWeather():
             if (tf<=t_sunset) and (tf+dt>t_sunset):
                 dx = self.TimeDiffToPixels(t_sunset-tf)  - xstep/2
                 self.sprite.Draw("moon",0,xpos+dx,ymoon)
-                print("---","moon",ymoon,ypos)
                 objcounter+=1
                 if (objcounter==2):
                     break;
@@ -235,14 +234,16 @@ class DrawWeather():
         
 
         xright = xstart + xstep*nforecasrt
-        for holiday_obj in self.cfg.GetAllHolidays(t,t+dt*(nforecasrt+1) ):
+        xleft=0
+        tf = t+dt*(nforecasrt+1)
+        for holiday_obj in self.cfg.GetAllHolidays(t,tf ):
             assert holiday_obj!=None
-            t_holiday = holiday_obj.MakeTimeStart(tf) 
+            t_holiday = holiday_obj.MakeTimeStart(t) 
             assert t_holiday!= None
-            dx = self.TimeDiffToPixels(t_holiday-tf)  - xstep/2
+            dx = self.TimeDiffToPixels(t_holiday-t) 
             hypos = holiday_obj.ypos
-            hxpos = xright+dx #todo: center align insead of left
-            print(">>>",xpos,t_holiday,holiday_obj)
+            hxpos = xleft+dx #todo: center align insead of left
+            print(">>>",dx,t_holiday,holiday_obj)
             if (hxpos<0):#todo: do a smooth move to the left instead of disappearing
                 hxpos=0
             self.sprite.Draw(holiday_obj.sprite,holiday_obj.index,hxpos,hypos)

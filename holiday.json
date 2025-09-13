@@ -7,7 +7,7 @@
       "date": "13.09",
       "sprite":"stork",
       "index": 0,
-      "time": "10:00",
+      "time": "17:00",
 	  "ypos":31,
 	  "stayhours": 6,
       "text": "TEST"
@@ -16,10 +16,20 @@
 
     {
       "date": "14.09",
-      "sprite":"santa",
-      "index": 0,
+      "sprite":"stork",
+      "index": 1,
       "time": "0:00",
 	  "ypos":31,
+	  "stayhours": 6,
+      "text": "TEST"
+    },
+
+    {
+      "date": "14.09",
+      "sprite":"santa",
+      "index": 0,
+      "time": "4:00",
+	  "ypos":32,
 	  "stayhours": 6,
       "text": "TEST"
     }
