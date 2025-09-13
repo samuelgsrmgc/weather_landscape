@@ -1,6 +1,8 @@
 import os
 from p_weather.holidays import WLHolidays,WLHEntry
 import datetime
+from typing import List,Tuple
+
 
 
 class WLBaseSettings(object):
@@ -108,5 +110,5 @@ class WLBaseSettings(object):
         return self.HOLIDAYS.Load(path)
         
         
-    def GetOneHoliday(self, t0 : datetime.datetime, t1: datetime.datetime) -> WLHEntry:
-        return self.HOLIDAYS.GetOne(t0,t1)
+    def GetAllHolidays(self, t0 : datetime.datetime, t1: datetime.datetime) -> List[WLHEntry]:
+        return self.HOLIDAYS.GetAll(t0,t1)

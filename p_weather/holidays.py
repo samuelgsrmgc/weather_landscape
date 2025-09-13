@@ -8,23 +8,19 @@ import datetime
 @dataclass
 class WLHEntry:
 
-    OPT_POSNAN = 0
-    OPT_POSTOP = 1
-    OPT_POSMID = 2
-    OPT_POSBOT = 3
+    DEFAULT_HOUR = 12
+    DEFAULT_MIN = 0
+    DEFAULT_DAY = 1
+    DEFAULT_MON = 1
 
-    OPT_POSTOP_STR = "pos_top"
-    OPT_POSMID_STR = "pos_center"
-    OPT_POSBOT_STR = "pos_bottom"
-    
-    
 
     date: str
     sprite: str
     index: int
     time: str
-    options: str
     text: str
+    ypos: int
+    stayhours: int  
 
 
     def __str__(self):
@@ -32,34 +28,24 @@ class WLHEntry:
 
     @property
     def hour(self):
-        (h,m,s) = self.Split(self.time,":",(12,0,0)) 
+        (h,m,s) = self.Split(self.time,":",(self.DEFAULT_HOUR,self.DEFAULT_MIN,0)) 
         return h
 
     @property
     def min(self):
-        (h,m,s) = self.Split(self.time,":",(12,0,0)) 
+        (h,m,s) = self.Split(self.time,":",(self.DEFAULT_HOUR,self.DEFAULT_MIN,0)) 
         return m
         
     @property
     def day(self):
-        (d,m,y) = self.Split(self.date,".",(1,1,2000)) 
+        (d,m,y) = self.Split(self.date,".",(self.DEFAULT_DAY,self.DEFAULT_MON,2000)) 
         return d
 
     @property
     def month(self):
-        (d,m,y) = self.Split(self.date,".",(1,1,2000)) 
+        (d,m,y) = self.Split(self.date,".",(self.DEFAULT_DAY,self.DEFAULT_MON,2000)) 
         return m
     
-    @property    
-    def optpos(self):    
-        strs = [self.OPT_POSTOP_STR,OPT_POSMID_STR,OPT_POSBOT_STR]
-        ints = [self.OPT_POSTOP,OPT_POSMID,OPT_POSBOT]
-        assert len(strs) == len(ints)
-        for i in range( len(strs)):
-            if (self.options.contains(strs[i])):
-                return ints[i]
-        return self.OPT_POSNAN
-        
         
     def Split(self,text:str,sep:str,default:Tuple):
         assert len(default) == 3
@@ -77,8 +63,23 @@ class WLHEntry:
         return r
             
             
-    def MakeTime(self,t:datetime.datetime):
-        return datetime.datetime(t.year,self.month, self.day, self.hour, self.min, 0, 0)
+    def MakeTimeStart(self,t:datetime.datetime):
+        try:
+            st = datetime.datetime(t.year,self.month, self.day, self.hour, self.min, 0, 0)
+        except:
+            st = None
+        return st
+        
+    def MakeTimeStop(self,t:datetime.datetime):
+        st = self.MakeTimeStart(t)
+        if st==None:
+            return None
+        try:
+            dt = datetime.timedelta( hours = self.stayhours )
+        except:
+            return  None
+        return st+dt
+   
         
 
 
@@ -122,22 +123,29 @@ class WLHolidays(object):
                 entries = [WLHEntry(**item) for item in obj.get("data", [])]
                 self.data += entries
                 title = obj.get("title", "Unknown")
-                print("Loaded %i of '%s' from '%s'" % (len(entries),obj.get("title", "something"),filepath))               
-            except:
-                print("Holidays file '%s' load error" % filepath)
+                print("Loaded %i of '%s' from '%s'" % (len(entries),obj.get("title", "something"),filepath))   
+                for e in self.data:
+                    t = e.MakeTimeStart( datetime.datetime.now() ) 
+                    if (t==None):
+                        print("Date error in %s" % str(e))   
+            except Exception as e:
+                print("Holidays file '%s' load error: %s" % (filepath, str(e)))
                 continue
           
         
             
             
             
-    def GetOne(self, t0 : datetime.datetime, t1: datetime.datetime) -> WLHEntry:   
+    def GetAll(self, t0 : datetime.datetime, t1: datetime.datetime) -> List[WLHEntry]:   
+        result = []
         for e in self.data:
-            t = e.MakeTime(t0) 
-            r = (t!=None) and (t>=t0) and (t<t1)
-            if r:
-                return e
-        return None
+            t = e.MakeTimeStart(t0) 
+            tt = e.MakeTimeStop(t0) 
+            r = (t!=None) and  ( (t>=t0) and (t<t1) )
+            rr = (tt!=None) and ( (tt>=t0) and (tt<t1) ) 
+            if r or rr:
+                result.append(e)
+        return result
                 
          
 

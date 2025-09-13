@@ -4,14 +4,25 @@
 
 
     {
-      "date": "12.09",
+      "date": "13.09",
       "sprite":"stork",
       "index": 0,
-      "time": "2:00",
-      "options": "top;stay 6;",
+      "time": "10:00",
+	  "ypos":31,
+	  "stayhours": 6,
+      "text": "TEST"
+    },
+
+
+    {
+      "date": "14.09",
+      "sprite":"santa",
+      "index": 0,
+      "time": "0:00",
+	  "ypos":31,
+	  "stayhours": 6,
       "text": "TEST"
     }
-
 
 
     

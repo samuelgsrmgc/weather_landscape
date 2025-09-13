@@ -183,7 +183,6 @@ class DrawWeather():
         
         self.BlockRange(tline,0,x0)
         
-        
         s=sun(owm.LAT,owm.LON) 
         tf = t 
         xpos = xstart
@@ -198,18 +197,9 @@ class DrawWeather():
             t_noon = datetime.datetime(tf.year,tf.month,tf.day,12,0,0,0)
             t_midn = datetime.datetime(tf.year,tf.month,tf.day,0,0,0,0)+datetime.timedelta(days=1)
             
-           #print(tf," - ",tf + dt,"   ",t_noon,t_midn)
+            #print("---",tf," - ",tf + dt,"   ",t_noon,t_midn)
 
             ymoon = ypos-ystep*5/8
-
-            holiday_obj = self.cfg.GetOneHoliday(tf,tf+dt)
-            if holiday_obj:
-                t_holiday = holiday_obj.MakeTime(tf) 
-                print(">>>",t_holiday,holiday_obj)
-                assert t_holiday!= None
-                dx = self.TimeDiffToPixels(t_holiday-tf)  - xstep/2
-                yholiday = ymoon #todo:update
-                self.sprite.Draw(holiday_obj.sprite,holiday_obj.index,xpos+dx,yholiday)
 
             if (tf<=t_sunrise) and (tf+dt>t_sunrise):
                 dx = self.TimeDiffToPixels(t_sunrise-tf)  - xstep/2
@@ -221,10 +211,11 @@ class DrawWeather():
             if (tf<=t_sunset) and (tf+dt>t_sunset):
                 dx = self.TimeDiffToPixels(t_sunset-tf)  - xstep/2
                 self.sprite.Draw("moon",0,xpos+dx,ymoon)
+                print("---","moon",ymoon,ypos)
                 objcounter+=1
                 if (objcounter==2):
                     break;
-                    
+
             if (tf<=t_noon) and (tf+dt>t_noon):
                 dx = self.TimeDiffToPixels(t_noon-tf)  - xstep/2
                 ix =int(xpos+dx)
@@ -242,6 +233,20 @@ class DrawWeather():
             xpos+=xstep
             tf += dt
         
+
+        xright = xstart + xstep*nforecasrt
+        for holiday_obj in self.cfg.GetAllHolidays(t,t+dt*(nforecasrt+1) ):
+            assert holiday_obj!=None
+            t_holiday = holiday_obj.MakeTimeStart(tf) 
+            assert t_holiday!= None
+            dx = self.TimeDiffToPixels(t_holiday-tf)  - xstep/2
+            hypos = holiday_obj.ypos
+            hxpos = xright+dx #todo: center align insead of left
+            print(">>>",xpos,t_holiday,holiday_obj)
+            if (hxpos<0):#todo: do a smooth move to the left instead of disappearing
+                hxpos=0
+            self.sprite.Draw(holiday_obj.sprite,holiday_obj.index,hxpos,hypos)
+
 
  
         istminprinted = False
