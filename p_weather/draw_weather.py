@@ -240,8 +240,8 @@ class DrawWeather():
             t_holiday = holiday_obj.MakeTimeStart(t) 
             assert t_holiday!= None
             dx = self.TimeDiffToPixels(t_holiday-t) 
-            hypos = holiday_obj.ypos
-            hxpos = xleft+dx #todo: center align insead of left
+            hypos = holiday_obj.yoffset
+            hxpos = xleft+dx+holiday_obj.xoffset 
             print(">>>",dx,t_holiday,holiday_obj)
             if (hxpos<0):#todo: do a smooth move to the left instead of disappearing
                 hxpos=0

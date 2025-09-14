@@ -19,8 +19,10 @@ class WLHEntry:
     index: int
     time: str
     text: str
-    ypos: int
+    yoffset: int
+    xoffset: int
     stayhours: int  
+
 
 
     def __str__(self):

@@ -3,35 +3,18 @@
   "data": [
 
 
-    {
-      "date": "13.09",
-      "sprite":"stork",
-      "index": 0,
-      "time": "17:00",
-	  "ypos":31,
-	  "stayhours": 6,
-      "text": "TEST"
-    },
 
 
     {
-      "date": "14.09",
-      "sprite":"stork",
-      "index": 1,
-      "time": "0:00",
-	  "ypos":31,
-	  "stayhours": 6,
-      "text": "TEST"
-    },
-
-    {
-      "date": "14.09",
+      "date": "24.12",
       "sprite":"santa",
       "index": 0,
-      "time": "7:00",
-	  "ypos":32,
-	  "stayhours": 6,
-      "text": "TEST"
+      "time": "11:00",
+	  "yoffset":32,
+	  "xoffset":-40,
+	  "stayhours": 3,
+      "text": "Christmas"
+
     }
 
 
