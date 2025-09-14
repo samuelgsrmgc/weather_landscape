@@ -6,13 +6,13 @@
 
 
     {
-      "date": "24.12",
+      "date": "25.12",
       "sprite":"santa",
       "index": 0,
-      "time": "11:00",
+      "time": "00:00",
 	  "yoffset":32,
 	  "xoffset":-40,
-	  "stayhours": 3,
+	  "stayhours": 6,
       "text": "Christmas"
 
     }

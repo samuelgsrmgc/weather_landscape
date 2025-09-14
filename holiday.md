@@ -32,10 +32,10 @@ Each object inside the `data` array has the following fields:
 
 | Field       | Type     | Description                                                                 | Example     |
 |-------------|----------|-----------------------------------------------------------------------------|-------------|
-| `date`      | string   | The date of the holiday (day and month format).                             | `"24.12"`   |
+| `date`      | string   | The date of the holiday (day and month format).                             | `"25.12"`   |
 | `sprite`    | string   | The identifier for the sprite related to the holiday.                | `"santa"`   |
 | `index`     | integer  | A numeric index of the sprite.                     | `0`         |
-| `time`      | string   | The starting time of the holiday event (24h format).                         | `"11:00"`   |
+| `time`      | string   | The starting time of the holiday event (24h format).                         | `"00:00"`   |
 | `yoffset`   | integer  | Vertical offset for sprite positioning.                                      | `32`        |
 | `xoffset`   | integer  | Horizontal offset for sprite positioning.                                    | `-40`       |
 | `stayhours` | integer  | Duration (in hours) the holiday event lasts.                                 | `3`         |
@@ -50,10 +50,10 @@ Each object inside the `data` array has the following fields:
   "title": "Holidays",
   "data": [
     {
-      "date": "24.12",
+      "date": "25.12",
       "sprite": "santa",
       "index": 0,
-      "time": "11:00",
+      "time": "00:00",
       "yoffset": 32,
       "xoffset": -40,
       "stayhours": 3,
