@@ -138,15 +138,22 @@ class WLHolidays(object):
             
             
             
+            
+            
     def GetAll(self, t0 : datetime.datetime, t1: datetime.datetime) -> List[WLHEntry]:   
         result = []
+
         for e in self.data:
             t = e.MakeTimeStart(t0) 
-            tt = e.MakeTimeStop(t0) 
-            r = (t!=None) and  ( (t>=t0) and (t<t1) )
-            rr = (tt!=None) and ( (tt>=t0) and (tt<t1) ) 
-            if r or rr:
-                result.append(e)
+            tt = e.MakeTimeStop(t1) 
+            if t==None or tt==None:
+                continue
+            if t0<t and t1<t:
+                continue
+            if t0>tt and t1>tt:
+                continue
+            result.append(e)
+            
         return result
                 
          
