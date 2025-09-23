@@ -87,7 +87,7 @@ class WLBaseSettings(object):
     
     def ImageFilePath(self,suffix:str=None):
         if suffix==None:
-            suffix==''
+            suffix=''
         return self.MakeFilePath(self.OUT_FILENAME+suffix+self.OUT_FILEEXT)
 
     def MakeFilePath(self,filename):
