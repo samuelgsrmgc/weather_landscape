@@ -27,10 +27,9 @@ class WeatherLandscape:
 
         return img
 
-
-    def SaveImage(self)->str:
+    def SaveImage(self,suffix:str=None)->str:
         img = self.MakeImage() 
-        outfilepath = self.cfg.ImageFilePath()
+        outfilepath = self.cfg.ImageFilePath(suffix)
         img.save(outfilepath) 
         return outfilepath
         

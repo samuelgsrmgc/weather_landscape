@@ -242,7 +242,7 @@ class DrawWeather():
             dx = self.TimeDiffToPixels(t_holiday-t) 
             hypos = holiday_obj.yoffset
             hxpos = xleft+dx+holiday_obj.xoffset 
-            print(">>>",dx,t_holiday,holiday_obj)
+            print(">>>",xleft,dx,t_holiday,holiday_obj)
             if (hxpos<0):#todo: do a smooth move to the left instead of disappearing
                 hxpos=0
             self.sprite.Draw(holiday_obj.sprite,holiday_obj.index,hxpos,hypos)

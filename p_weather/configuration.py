@@ -85,8 +85,10 @@ class WLBaseSettings(object):
     PRESSURE_MAX = 1030    
 
     
-    def ImageFilePath(self):
-        return self.MakeFilePath(self.OUT_FILENAME+self.OUT_FILEEXT)
+    def ImageFilePath(self,suffix:str=None):
+        if suffix==None:
+            suffix==''
+        return self.MakeFilePath(self.OUT_FILENAME+suffix+self.OUT_FILEEXT)
 
     def MakeFilePath(self,filename):
         return os.path.join(self.WORK_DIR,filename)                
