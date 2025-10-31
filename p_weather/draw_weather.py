@@ -183,7 +183,6 @@ class DrawWeather():
         
         self.BlockRange(tline,0,x0)
         
-        
         s=sun(owm.LAT,owm.LON) 
         tf = t 
         xpos = xstart
@@ -198,7 +197,7 @@ class DrawWeather():
             t_noon = datetime.datetime(tf.year,tf.month,tf.day,12,0,0,0)
             t_midn = datetime.datetime(tf.year,tf.month,tf.day,0,0,0,0)+datetime.timedelta(days=1)
             
-           #print(tf," - ",tf + dt,"   ",t_noon,t_midn)
+            #print("---",tf," - ",tf + dt,"   ",t_noon,t_midn)
 
             ymoon = ypos-ystep*5/8
 
@@ -215,7 +214,7 @@ class DrawWeather():
                 objcounter+=1
                 if (objcounter==2):
                     break;
-                    
+
             if (tf<=t_noon) and (tf+dt>t_noon):
                 dx = self.TimeDiffToPixels(t_noon-tf)  - xstep/2
                 ix =int(xpos+dx)
@@ -233,6 +232,21 @@ class DrawWeather():
             xpos+=xstep
             tf += dt
         
+
+        xleft = 0
+        tf = t+dt*(nforecasrt+1)
+        for holiday_obj in self.cfg.GetAllHolidays(t,tf ):
+            assert holiday_obj!=None
+            t_holiday = holiday_obj.MakeTimeStart(t) 
+            assert t_holiday!= None
+            dx = self.TimeDiffToPixels(t_holiday-t) 
+            hypos = holiday_obj.yoffset
+            hxpos = xleft+dx+holiday_obj.xoffset 
+            #print(">>>",xleft,dx,t_holiday,holiday_obj)
+            if (hxpos<0):#todo: do a smooth move to the left instead of disappearing
+                hxpos=0
+            self.sprite.Draw(holiday_obj.sprite,holiday_obj.index,hxpos,hypos)
+
 
  
         istminprinted = False

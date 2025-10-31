@@ -59,7 +59,6 @@ class Sprites(Canvas):
 
     BLACK=0
     WHITE=1
-    RED  =2
     TRANS=3
 
     PLASSPRITE = 10
@@ -87,7 +86,6 @@ class Sprites(Canvas):
     SMOKE_SIZE = 60
     
     
-
     def __init__(self,spritesdir:str,canvas:Image):
         super().__init__(canvas)
         self.pix = self.img.load()
@@ -114,6 +112,19 @@ class Sprites(Canvas):
         return img
 
 
+
+    def GetColor(self,palette,index):
+        r = palette[index * 3 + 0]
+        g = palette[index * 3 + 1]
+        b = palette[index * 3 + 2]
+        if r<20 and g<20 and b<20:
+            return self.BLACK
+        if r>235 and g>235 and b>235:
+            return self.WHITE
+        return self.TRANS 
+           
+
+
     def Draw(self,name,index,xpos,ypos,ismirror=False):
 
         if (xpos<0) or (ypos<0):
@@ -122,6 +133,7 @@ class Sprites(Canvas):
         #print("DRAW '%s' #%i at %i,%i" % (name,index,xpos,ypos))
     
         img = self.GetSprite(name,index)
+        palette = img.getpalette()
         if (ismirror):
             img = ImageOps.mirror(img)
         w, h = img.size
@@ -133,12 +145,12 @@ class Sprites(Canvas):
                     continue
                 if (ypos+y>=self.h) or (ypos+y<0):
                     continue
-                if (pix[x,y]==self.BLACK):
+               
+                c = self.GetColor(palette,pix[x,y])
+                if (c==self.BLACK):
                     self.Dot(xpos+x,ypos+y,self.Black)
-                elif (pix[x,y]==self.WHITE):
+                elif (c==self.WHITE):
                     self.Dot(xpos+x,ypos+y,self.White)
-                elif (pix[x,y]==self.RED):
-                    self.Dot(xpos+x,ypos+y,self.Black)
 
         return w
 
@@ -270,7 +282,7 @@ class Sprites(Canvas):
     def DrawSoil(self,tline:list[int],xoffset =0, dotcolor=None):
         width = len(tline)
         for x in range(width):
-            self.Dot(x+xoffset,tline[x],self.BLACK if dotcolor==None else dotcolor)
+            self.Dot(x+xoffset,tline[x],self.Black if dotcolor==None else dotcolor)
 
 
 

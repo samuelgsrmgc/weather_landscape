@@ -11,10 +11,11 @@ cfgs =  [
           WLConfig_BW(),
           WLConfig_BWI(),
           WLConfig_EINK(),
-          
+         
           WLConfig_RGB_Black(),          
           WLConfig_RGB_White(),
           ]
+          
 
 for cfg in cfgs:
     print("Using configuration %s" % cfg.TITLE)

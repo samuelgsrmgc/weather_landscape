@@ -150,7 +150,6 @@ httpd.serve_forever()
 
 
 # IPV6
-
 #class HTTPServerV6(HTTPServer):
 #    address_family = socket.AF_INET6    
 #httpd = HTTPServerV6(('::',SERV_PORT),WeatherLandscapeServer)

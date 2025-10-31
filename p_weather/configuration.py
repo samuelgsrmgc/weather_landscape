@@ -1,4 +1,8 @@
 import os
+from p_weather.holidays import WLHolidays,WLHEntry
+import datetime
+from typing import List,Tuple
+
 
 
 class WLBaseSettings(object):
@@ -81,8 +85,10 @@ class WLBaseSettings(object):
     PRESSURE_MAX = 1030    
 
     
-    def ImageFilePath(self):
-        return self.MakeFilePath(self.OUT_FILENAME+self.OUT_FILEEXT)
+    def ImageFilePath(self,suffix:str=None):
+        if suffix==None:
+            suffix=''
+        return self.MakeFilePath(self.OUT_FILENAME+suffix+self.OUT_FILEEXT)
 
     def MakeFilePath(self,filename):
         return os.path.join(self.WORK_DIR,filename)                
@@ -100,3 +106,11 @@ class WLBaseSettings(object):
         return self.MIMES.get(self.OUT_FILEEXT.lower(), None)        
     
     
+    HOLIDAYS = WLHolidays()
+    
+    def LoadHolidays(self,path:str=None):
+        return self.HOLIDAYS.Load(path)
+        
+        
+    def GetAllHolidays(self, t0 : datetime.datetime, t1: datetime.datetime) -> List[WLHEntry]:
+        return self.HOLIDAYS.GetAll(t0,t1)
