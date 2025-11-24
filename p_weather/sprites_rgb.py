@@ -43,7 +43,8 @@ class SpritesRGB(Sprites):
     def DrawRain(self,value,xpos,ypos,width,tline):
         super().DrawRain(value,xpos,ypos,width,tline,self.cfg.COLOR_RAIN)
         
-
+    def DrawSnow(self,value,xpos,ypos,width,tline):
+        super().DrawSnow(value,xpos,ypos,width,tline,self.cfg.COLOR_SNOW)
 
 
     def DrawSoil(self,tline:list[int],xoffset =0):
