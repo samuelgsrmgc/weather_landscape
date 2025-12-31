@@ -65,15 +65,15 @@ class WLHEntry:
         return r
             
             
-    def MakeTimeStart(self,t:datetime.datetime):
+    def MakeTimeStart(self,year:int):
         try:
-            st = datetime.datetime(t.year,self.month, self.day, self.hour, self.min, 0, 0)
+            st = datetime.datetime(year,self.month, self.day, self.hour, self.min, 0, 0)
         except:
             st = None
         return st
         
-    def MakeTimeStop(self,t:datetime.datetime):
-        st = self.MakeTimeStart(t)
+    def MakeTimeStop(self,year:int):
+        st = self.MakeTimeStart(year)
         if st==None:
             return None
         try:
@@ -144,8 +144,8 @@ class WLHolidays(object):
         result = []
         
         for e in self.data:
-            t = e.MakeTimeStart(t0) 
-            tt = e.MakeTimeStop(t1) 
+            t = e.MakeTimeStart(t0.year) 
+            tt = e.MakeTimeStop(t0.year) 
             if t==None or tt==None:
                 continue
             if t0<t and t1<t:
